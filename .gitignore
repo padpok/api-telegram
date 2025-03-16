@@ -1,8 +1,9 @@
 
 **/__pycache__/
 
-create-telegram-group/constants.py
-create-telegram-group/session.txt
+create_telegram_group/constants.py
+create_telegram_group/session.txt
+
 
 .idea
 

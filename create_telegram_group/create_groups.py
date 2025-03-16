@@ -1,4 +1,5 @@
 import os
+import asyncio
 from quart import Quart, request, jsonify
 from telethon import TelegramClient
 from telethon.sessions import StringSession
@@ -85,4 +86,5 @@ async def create_group():
 
 # Execute Quart
 if __name__ == '__main__':
-    app.run(debug=True)
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(app.run(debug=True, host="0.0.0.0", port=5000))

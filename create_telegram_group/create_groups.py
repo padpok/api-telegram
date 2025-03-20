@@ -25,13 +25,40 @@ client = TelegramClient(StringSession(TELEGRAM_SESSION), TELEGRAM_API_ID, TELEGR
 # Start Quart
 app = Quart(__name__)
 
+# @app.before_serving
+# async def startup():
+#     await client.connect()
+#     if not await client.is_user_authorized():
+#         print("The session is not authorised. Run authentication first.")
+#         exit(1)
+#     print("Telethon successfully started.")
+
+
 @app.before_serving
 async def startup():
-    await client.connect()
-    if not await client.is_user_authorized():
-        print("The session is not authorised. Run authentication first.")
-        exit(1)
-    print("Telethon successfully started.")
+    try:
+        await client.connect()
+        if not await client.is_user_authorized():
+            return jsonify({"error": "The session is not authorised"}), 500
+
+        return jsonify({}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/startup', methods=['POST'])
+async def startup():
+    try:
+        await client.connect()
+        if not await client.is_user_authorized():
+            return jsonify({"error": "The session is not authorised"}), 500
+
+        return jsonify({}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/create_group', methods=['POST'])
 async def create_group():
